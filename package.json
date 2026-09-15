@@ -1,8 +1,9 @@
 {
 	"name": "@chickenneo/sweph",
-	"version": "3.0.0",
+	"version": "3.0.1",
 	"description": "Swiss Ephemeris native bindings for Node.js (Linux x64, ESM + CommonJS)",
 	"license": "AGPL-3.0-or-later",
+	"gypfile": false,
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/chickenneo/sweph.git"
