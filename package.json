@@ -1,0 +1,50 @@
+{
+	"name": "swiss-ephemeris",
+	"version": "1.0.0",
+	"description": "Swiss Ephemeris native bindings for Node.js (Linux x64, ESM + CommonJS)",
+	"license": "AGPL-3.0-or-later",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/chickenneo/swiss-ephemeris.git"
+	},
+	"homepage": "https://github.com/chickenneo/swiss-ephemeris#readme",
+	"bugs": {
+		"url": "https://github.com/chickenneo/swiss-ephemeris/issues"
+	},
+	"keywords": [
+		"swiss ephemeris",
+		"swisseph",
+		"astrology",
+		"astronomy",
+		"ephemeris",
+		"native"
+	],
+	"exports": {
+		"types": "./index.d.ts",
+		"require": "./index.js",
+		"import": "./index.mjs"
+	},
+	"main": "index.js",
+	"types": "./index.d.ts",
+	"files": [
+		"./index.js",
+		"./index.mjs",
+		"./index.d.ts",
+		"./constants.js",
+		"./sweph.node",
+		"./LICENSE",
+		"./README.md"
+	],
+	"os": [
+		"linux"
+	],
+	"cpu": [
+		"x64"
+	],
+	"libc": [
+		"glibc"
+	],
+	"engines": {
+		"node": ">=20"
+	}
+}
