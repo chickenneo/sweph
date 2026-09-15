@@ -1,4 +1,4 @@
-# @chickenneo/swiss-ephemeris
+# @chickenneo/sweph
 
 Swiss Ephemeris bindings for Node.js, shipped as a prebuilt native addon for Linux x64.
 
@@ -21,8 +21,8 @@ The addon is prebuilt and loaded directly, so no compiler is needed. Other platf
 ## Installation
 
 ```bash
-npm install @chickenneo/swiss-ephemeris
-pnpm add @chickenneo/swiss-ephemeris
+npm install @chickenneo/sweph
+pnpm add @chickenneo/sweph
 ```
 
 ## Ephemeris files
@@ -45,8 +45,8 @@ Moshier model instead of reporting an error, so it is worth verifying the path a
 ## Usage
 
 ```js
-import sweph from "@chickenneo/swiss-ephemeris";
-// or: const sweph = require("@chickenneo/swiss-ephemeris");
+import sweph from "@chickenneo/sweph";
+// or: const sweph = require("@chickenneo/sweph");
 
 const { constants: c } = sweph;
 
@@ -68,7 +68,7 @@ console.log(moon.data[0]); // longitude in degrees
 Named imports work as well:
 
 ```js
-import { calc_ut, constants, set_ephe_path } from "@chickenneo/swiss-ephemeris";
+import { calc_ut, constants, set_ephe_path } from "@chickenneo/sweph";
 ```
 
 Swiss Ephemeris keeps global state. Settings such as `set_ephe_path`, `set_sid_mode`
@@ -94,6 +94,19 @@ be made before distributing software that contains it, and before running a publ
 built on it. Note that the AGPL applies to network services as well: if this package is used
 in a server that users interact with over a network, that server's source code has to be made
 available under the AGPL, unless a professional license has been purchased.
+
+## Source code
+
+The bundled `sweph.node` is the unmodified `linux-x64` prebuild from
+[sweph v2.10.3-8](https://github.com/timotejroiko/sweph/tree/v2.10.3-8)
+([npm](https://www.npmjs.com/package/sweph/v/2.10.3-8)), which is also the corresponding
+source for the binary, as required by the AGPL. It is byte-for-byte identical to the one
+published there (SHA-1 `d9a3fd472579323fb472f65f18df63e0b02819e3`) and contains the
+Swiss Ephemeris C library together with its N-API bindings.
+
+This package differs from `sweph` only in its JavaScript layer: it drops the install
+scripts and runtime dependencies, ships a single prebuild for Linux x64, and adjusts the
+TypeScript types to the package name.
 
 ## Credits
 

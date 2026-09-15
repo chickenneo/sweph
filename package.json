@@ -1,15 +1,15 @@
 {
-	"name": "@chickenneo/swiss-ephemeris",
+	"name": "@chickenneo/sweph",
 	"version": "2.10.3-8",
 	"description": "Swiss Ephemeris native bindings for Node.js (Linux x64, ESM + CommonJS)",
 	"license": "AGPL-3.0-or-later",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/chickenneo/swiss-ephemeris.git"
+		"url": "git+https://github.com/chickenneo/sweph.git"
 	},
-	"homepage": "https://github.com/chickenneo/swiss-ephemeris#readme",
+	"homepage": "https://github.com/chickenneo/sweph#readme",
 	"bugs": {
-		"url": "https://github.com/chickenneo/swiss-ephemeris/issues"
+		"url": "https://github.com/chickenneo/sweph/issues"
 	},
 	"keywords": [
 		"swiss ephemeris",
