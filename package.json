@@ -1,6 +1,6 @@
 {
 	"name": "@chickenneo/swiss-ephemeris",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Swiss Ephemeris native bindings for Node.js (Linux x64, ESM + CommonJS)",
 	"license": "AGPL-3.0-or-later",
 	"repository": {
