@@ -19,6 +19,11 @@
 		"ephemeris",
 		"native"
 	],
+	"scripts": {
+		"generate": "node tools/gen_embedded.js && node tools/gen_functions.js",
+		"build": "npm run generate && node-gyp rebuild && cp build/Release/sweph.node ./sweph.node",
+		"test": "node tools/test.js"
+	},
 	"exports": {
 		"types": "./index.d.ts",
 		"require": "./index.js",
@@ -49,5 +54,9 @@
 	},
 	"publishConfig": {
 		"access": "public"
+	},
+	"devDependencies": {
+		"node-addon-api": "^8.9.0",
+		"node-gyp": "^11.2.0"
 	}
 }

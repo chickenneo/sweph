@@ -1,2 +1,5 @@
 node_modules/
 *.tgz
+build/
+src/functions.cpp
+src/embedded_ephe.c

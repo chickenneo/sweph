@@ -1,7 +1,9 @@
 # @chickenneo/sweph
 
-Swiss Ephemeris bindings for Node.js, shipped as a prebuilt native addon for Linux x64.
+Swiss Ephemeris for Node.js as a single prebuilt native addon for Linux x64,
+**with the ephemeris data files compiled into the binary**.
 
+- Nothing to download, no data files to ship, no `set_ephe_path` to configure
 - No install scripts, no build step, no dependencies
 - Works with both ESM (`import`) and CommonJS (`require`)
 - Full TypeScript types for all 104 functions and 325 constants
@@ -18,30 +20,6 @@ Swiss Ephemeris bindings for Node.js, shipped as a prebuilt native addon for Lin
 
 The addon is prebuilt and loaded directly, so no compiler is needed. Other platforms are not supported.
 
-## Installation
-
-```bash
-npm install @chickenneo/sweph
-pnpm add @chickenneo/sweph
-```
-
-## Ephemeris files
-
-The package does not bundle ephemeris data files. Download them from the
-[official Swiss Ephemeris repository](https://github.com/aloistr/swisseph/tree/master/ephe)
-and point the library at the folder that contains them:
-
-| File | Needed for |
-|---|---|
-| `sepl_18.se1` | planets, 1800–2399 |
-| `semo_18.se1` | the Moon, 1800–2399 |
-| `seas_18.se1` | asteroids such as Chiron and Ceres |
-| `sefstars.txt` | fixed stars (`fixstar*`) |
-| `seorbel.txt` | fictitious bodies |
-
-Without a valid path, Swiss Ephemeris silently falls back to the less accurate
-Moshier model instead of reporting an error, so it is worth verifying the path at startup.
-
 ## Usage
 
 ```js
@@ -50,17 +28,11 @@ import sweph from "@chickenneo/sweph";
 
 const { constants: c } = sweph;
 
-sweph.set_ephe_path("./ephe");
-
 const date = sweph.utc_to_jd(2026, 9, 15, 12, 0, 0, c.SE_GREG_CAL);
 if (date.flag !== c.OK) throw new Error(date.error);
 
 const [jd_et, jd_ut] = date.data;
 const moon = sweph.calc_ut(jd_ut, c.SE_MOON, c.SEFLG_SWIEPH | c.SEFLG_SPEED);
-
-if (!(moon.flag & c.SEFLG_SWIEPH)) {
-  throw new Error("ephemeris files were not found");
-}
 
 console.log(moon.data[0]); // longitude in degrees
 ```
@@ -71,11 +43,26 @@ Named imports work as well:
 import { calc_ut, constants, set_ephe_path } from "@chickenneo/sweph";
 ```
 
-Swiss Ephemeris keeps global state. Settings such as `set_ephe_path`, `set_sid_mode`
-and `set_topo` stay in effect for every later call, which matters in a server that
-handles many requests.
+Swiss Ephemeris keeps global state. Settings such as `set_sid_mode` and `set_topo`
+stay in effect for every later call, which matters in a server that handles many requests.
 
-Call `close()` on shutdown to release the ephemeris file handles.
+## Ephemeris data
+
+These files are compiled into the addon and are always available:
+
+| File | Covers |
+|---|---|
+| `sepl_18.se1` | planets, 1800–2399 |
+| `semo_18.se1` | the Moon, 1800–2399 |
+| `seas_18.se1` | asteroids such as Chiron and Ceres |
+| `sefstars.txt` | fixed stars (`fixstar*`) |
+| `seorbel.txt` | fictitious bodies |
+
+Calling `set_ephe_path()` is therefore not required. Requests for any of the files above are
+served from memory; anything else, such as `sedeltat.txt` or a JPL file, is still read from
+the path if one is set. To use different data, for example ephemerides covering years outside
+1800–2399, place those files in a folder and pass it to `set_ephe_path()` — note that files
+with the names above will still be served from the embedded copies.
 
 ## Documentation
 
@@ -95,18 +82,25 @@ built on it. Note that the AGPL applies to network services as well: if this pac
 in a server that users interact with over a network, that server's source code has to be made
 available under the AGPL, unless a professional license has been purchased.
 
-## Source code
+## Source code and building
 
-The bundled `sweph.node` is the unmodified `linux-x64` prebuild from
-[sweph v2.10.3-8](https://github.com/timotejroiko/sweph/tree/v2.10.3-8)
-([npm](https://www.npmjs.com/package/sweph/v/2.10.3-8)), which is also the corresponding
-source for the binary, as required by the AGPL. It is byte-for-byte identical to the one
-published there (SHA-1 `d9a3fd472579323fb472f65f18df63e0b02819e3`) and contains the
-Swiss Ephemeris C library together with its N-API bindings.
+The complete source for the published binary is in this repository: the Swiss Ephemeris C
+library in `swisseph/`, the N-API bindings in `src/`, the ephemeris data in `ephe/`, and the
+build scripts in `tools/`.
 
-This package differs from `sweph` only in its JavaScript layer: it drops the install
-scripts and runtime dependencies, ships a single prebuild for Linux x64, and adjusts the
-TypeScript types to the package name.
+Swiss Ephemeris is modified here in exactly one place. In `swisseph/sweph.c`, `swi_fopen()`
+first asks `swi_fopen_embedded()` (generated into `src/embedded_ephe.c` by
+`tools/gen_embedded.js`) for the requested file and, when it is one of the embedded ones,
+returns a read-only `FILE *` over the in-memory copy through `fmemopen()`. Everything else
+is unchanged, which is why `glibc` is required.
+
+To rebuild:
+
+```bash
+npm install     # node-gyp and node-addon-api
+npm run build   # generates sources, compiles, updates ./sweph.node
+npm test        # verifies the embedded data is what gets used
+```
 
 ## Credits
 
