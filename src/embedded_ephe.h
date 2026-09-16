@@ -3,10 +3,6 @@
 #ifndef SWEPH_EMBEDDED_EPHE_H
 #define SWEPH_EMBEDDED_EPHE_H
 
-#ifndef _GNU_SOURCE
-#define _GNU_SOURCE /* fmemopen */
-#endif
-
 #include <stdio.h>
 
 #ifdef __cplusplus

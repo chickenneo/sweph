@@ -36,9 +36,6 @@
 			"include_dirs": [
 				"src"
 			],
-			"defines": [
-				"_GNU_SOURCE"
-			],
 			"direct_dependent_settings": {
 				"include_dirs": [
 					"swisseph"
