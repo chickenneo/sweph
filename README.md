@@ -15,10 +15,19 @@ Swiss Ephemeris for Node.js as a single prebuilt native addon for Linux x64,
 |---|---|
 | OS | Linux |
 | Architecture | x64 |
-| libc | glibc 2.14 or newer |
+| libc | glibc 2.38 or newer |
 | Node.js | 20 or newer |
 
 The addon is prebuilt and loaded directly, so no compiler is needed. Other platforms are not supported.
+
+glibc 2.38 means Debian 13, Ubuntu 24.04 or a comparably recent distribution; in Docker, a
+`trixie` or `noble` based Node image. Older bases such as `node:22-bookworm` (glibc 2.36),
+Ubuntu 22.04, RHEL 9 or Amazon Linux 2023 are too old, and Alpine does not ship glibc at all.
+The package declares `"os"`, `"cpu"` and `"libc"`, so npm and pnpm refuse to install it on a
+platform it cannot run on, rather than failing later at load time.
+
+Building the addon on an older distribution lowers this requirement; the limit comes from the
+machine the binary was compiled on, not from the code.
 
 ## Usage
 
